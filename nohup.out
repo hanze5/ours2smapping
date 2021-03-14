@@ -1,0 +1,16 @@
+2021-03-13 17:32:11.709191: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+Main stared ...
+Traceback (most recent call last):
+  File "mapper.py", line 402, in <module>
+    tf.app.run()
+  File "/usr/local/lib/python3.6/site-packages/tensorflow/python/platform/app.py", line 125, in run
+    _sys.exit(main(argv))
+  File "mapper.py", line 395, in main
+    mapper = Mapper(FLAGS.forward_only)
+  File "mapper.py", line 38, in __init__
+    self.target_graph = TargetGraph(FLAGS.target_graph_path)
+  File "/home/zhanghz/mywork/learning/学长的代码/graph.py", line 41, in __init__
+    self.compute_min_distance()
+  File "/home/zhanghz/mywork/learning/学长的代码/graph.py", line 63, in compute_min_distance
+    if self.dt[i][j] > self.dt[i][k] + self.dt[k][j]:
+KeyboardInterrupt
