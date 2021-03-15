@@ -110,10 +110,64 @@ class TargetGraph(Graph):
             '''
             检查是否匹配成功
             '''
-            for node in source_graph.adjacency_list[len(preceeding_action_list)]: #第？个结点的子节点？  此处有疑问！！！！！！！！！！！！！！！！
+            '''
+            重要前提，当前结点之前的是一定在核心集里的，否则不可能执行到当前结点
+            '''
+            #1.2   (也是最初版本的仅有约束)
+            for node in source_graph.adjacency_list[len(preceeding_action_list)]: 
+                #node结点是候选结点的邻居结点
                 if node < len(preceeding_action_list): # already in core set
                     if preceeding_action_list[node] not in self.adjacency_list[target_node]:
                         return False
+            #1.3
+            for node in self.adjacency_list[target_node]:
+                #node结点是target结点的邻居结点
+                if node in preceeding_action_list: # already in core set
+                    if  preceeding_action_list.index(node) not in source_graph.adjacency_list[len(preceeding_action_list)]:
+                        return False
+            #2
+            small_nb_of_TandM = 0
+            big_nb_of_TandM = 0
+
+            for node in source_graph.adjacency_list[len(preceeding_action_list)]: 
+                #node结点是候选节点的邻居结点
+                for snode in source_graph.adjacency_list[node]:
+                    #snode是候选结点邻居结点的邻居结点
+                    if snode< len(preceeding_action_list): # already in core set
+                        small_nb_of_TandM += 1
+                        break
+
+            for node in self.adjacency_list[target_node]:
+                #node是尝试匹配的target结点的邻居结点
+                for bnode in self.adjacency_list[node]:
+                    #bnode是尝试匹配的target结点的邻居节点
+                    if bnode in preceeding_action_list:
+                        big_nb_of_TandM += 1
+                        break
+            if (small_nb_of_TandM > big_nb_of_TandM):
+                return False
+
+            #3     
+            small_nb_of_TandM = 0
+            big_nb_of_TandM = 0
+            for node in source_graph.adjacency_list[len(preceeding_action_list)]: 
+                #node结点是候选节点的邻居结点
+                for snode in source_graph.adjacency_list[node]:
+                    #snode是候选结点邻居结点的邻居结点
+                    if snode> len(preceeding_action_list): # already in core set
+                        small_nb_of_TandM += 1
+                        break
+
+            for node in self.adjacency_list[target_node]:
+                #node是尝试匹配的target结点的邻居结点
+                for bnode in self.adjacency_list[node]:
+                    #bnode是尝试匹配的target结点的邻居节点
+                    if bnode not in preceeding_action_list:
+                        big_nb_of_TandM += 1
+                        break
+            if (small_nb_of_TandM > big_nb_of_TandM):
+                return False
+
             return True
 
         # 结点分为三种模式，初始化为3，正在操作以及操作过的结点为1，与1结点相邻的结点为2
@@ -142,6 +196,7 @@ class TargetGraph(Graph):
                     self.set_vector_source[neighbour] = 2
 
             infeasible = []
+            ##挨个判断 
             for node in range(len(self.graph)):                    
                 if node in preceeding_action_list \
                         or self.set_vector_target[node] != 2 \
