@@ -14,7 +14,7 @@ class Graph():
         self.read_in_graph(file_path)
         self.init_adjacency_list()
 
-    def init_adjacency_list(self):     ##初始化邻接表  默认每个节点的度不超过4个？
+    def init_adjacency_list(self):     ##初始化邻接表
             node_num = len(self.graph)
             self.adjacency_list = []
             for i in range(node_num):
@@ -86,7 +86,7 @@ class TargetGraph(Graph):
     # all start from 1
     def get_distance_between(self, source, target):
         '''
-        返回查询图的特定结点到目标图结点之间的距离？？    返回图中任意两结点之间的最短距离
+        返回图中任意两结点之间的最短距离
         '''
         assert (source > 0 and target > 0)
         return float(self.dt[source - 1][target - 1])
@@ -168,6 +168,12 @@ class TargetGraph(Graph):
             if (small_nb_of_TandM > big_nb_of_TandM):
                 return False
 
+            # # 镜像做另一半
+            # for node in self.adjacency_list[target_node]:
+            #     if node in preceeding_action_list: # 找到在核心集里并且也是target_node的邻居的结点
+            #         source_node = preceeding_action_list.index(node) # 找到该点的index，也就是该点匹配的对应节点
+            #         if source_node not in source_graph.adjacency_list[len(preceeding_action_list)]: #检查对应结点是否是当前操作点的邻居
+            #             return False
             return True
 
         # 结点分为三种模式，初始化为3，正在操作以及操作过的结点为1，与1结点相邻的结点为2
